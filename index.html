@@ -1,39 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>TubeBoost AI</title>
-</head>
+exports.handler = async function(event){
 
-<body style="font-family:Arial;text-align:center;padding:40px;">
+const { title } = JSON.parse(event.body);
 
-<h1>TubeBoost AI</h1>
-<p>Test your YouTube title before uploading</p>
+let score = 50;
+let suggestions = [];
 
-<input id="titleInput" placeholder="Enter your video title">
+/* SCORE LOGIC */
 
-<button onclick="analyzeTitle()">Analyze</button>
-
-<div id="result"></div>
-
-<script>
-
-async function analyzeTitle(){
-
-let title=document.getElementById("titleInput").value;
-
-let response=await fetch("/.netlify/functions/analyze",{
-method:"POST",
-body:JSON.stringify({title})
-});
-
-let data=await response.json();
-
-document.getElementById("result").innerHTML=
-"<h2>Viral Score: "+data.score+"</h2>";
-
+if(title.length < 60){
+score += 10;
+}else{
+suggestions.push("Try shortening the title to under 60 characters.");
 }
 
-</script>
+if(/\d/.test(title)){
+score += 10;
+}else{
+suggestions.push("Add a number to increase curiosity.");
+}
 
-</body>
-</html>
+if(/how|why|best|secret|tested|method/i.test(title)){
+score += 20;
+}else{
+suggestions.push("Use curiosity words like 'How', 'Secret', or 'Best'.");
+}
+
+/* GENERATE BETTER TITLES */
+
+const betterTitles = [
+`I Tried 5 Ways: ${title} (One Worked!)`,
+`The Secret Behind ${title}`,
+`How Beginners Succeed With: ${title}`,
+`The $0 Method For ${title}`,
+`What Nobody Tells You About ${title}`
+];
+
+/* SEO TAGS */
+
+const tags = [
+title,
+"title tips",
+"youtube growth",
+"viral youtube titles",
+"youtube seo",
+"youtube algorithm",
+"youtube views",
+"grow youtube channel"
+];
+
+/* DESCRIPTION */
+
+const description = `
+Want to know the truth about ${title}?
+
+In this video we break down the strategies, tips, and methods that can help you succeed.
+
+Watch until the end to discover simple techniques that can help you grow faster.
+
+Subscribe for more YouTube growth tips.
+`;
+
+return{
+statusCode:200,
+body:JSON.stringify({
+score,
+suggestions,
+betterTitles,
+tags,
+description
+})
+};
+
+};
