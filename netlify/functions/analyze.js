@@ -1,16 +1,17 @@
-exports.handler = async function(event){
+document.getElementById("result").innerHTML =
+`
+<h2>Viral Score: ${data.score}</h2>
 
-const { title } = JSON.parse(event.body);
+<h3>Suggestions</h3>
+<p>${data.suggestions.join("<br>")}</p>
 
-let score = 50;
+<h3>Better Titles</h3>
+<p>${data.betterTitles.join("<br>")}</p>
 
-if(title.length < 60) score += 10;
-if(/\d/.test(title)) score += 10;
-if(/how|why|best|secret/i.test(title)) score += 20;
+<h3>SEO Tags</h3>
+<p>${data.tags.join(", ")}</p>
 
-return{
-statusCode:200,
-body:JSON.stringify({score})
-};
+<h3>Description</h3>
+<p>${data.description}</p>
+`;
 
-};
