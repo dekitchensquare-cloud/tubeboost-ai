@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TubeBoost AI</title>
+</head>
+
+<body style="font-family:Arial;text-align:center;padding:40px;">
+
+<h1>TubeBoost AI</h1>
+<p>Test your YouTube title before uploading</p>
+
+<input id="titleInput" placeholder="Enter your video title">
+
+<button onclick="analyzeTitle()">Analyze</button>
+
+<div id="result"></div>
+
+<script>
+
+async function analyzeTitle(){
+
+let title=document.getElementById("titleInput").value;
+
+let response=await fetch("/.netlify/functions/analyze",{
+method:"POST",
+body:JSON.stringify({title})
+});
+
+let data=await response.json();
+
+document.getElementById("result").innerHTML=
+"<h2>Viral Score: "+data.score+"</h2>";
+
+}
+
+</script>
+
+</body>
+</html>
